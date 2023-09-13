@@ -1,8 +1,8 @@
 resources:
   repositories:
-    - repository: <repo_name>
+    - repository: jenkins-open-sourcce
       type: git
-      name: <project_name>/<repo_name>
+      name: KunalTi/jenkins-open-sourcce
       ref: refs/heads/master
 
 trigger: none
@@ -15,9 +15,9 @@ stages:
       vmImage: 'ubuntu-latest'
     steps:
     - checkout: self
-    - checkout: <repo_name>
+    - checkout: jenkins-open-sourcce
 
-    - bash: docker run -d -p <container_port>:<target_port> <your_image>
+    - bash: docker run -d -p 8080:8080 jenkins/jenkins
       displayName: 'App Container'
 
     - bash: |

@@ -9,15 +9,16 @@ stages:
     steps:
     - bash: |
         # Pull the InfluxDB Docker image
-        docker pull influxdb
+        sudo docker pull influxdb
         # Run the InfluxDB container
-        docker run -d -p 80:80 influxdb
+        sudo docker run -d -p 80:80 influxdb
       displayName: 'Pull and Run InfluxDB Container'
 
     - bash: |
-        chmod -R 777 ./
-        docker run --rm -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-stable zap-full-scan.py -t http://$(ip -f inet -o addr show docker0 | awk '{print $4}' | cut -d '/' -f 1):80 -x xml_report.xml
+        sudo chmod -R 777 ./
+        sudo docker run --rm -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-stable zap-full-scan.py -t http://$(ip -f inet -o addr show docker0 | awk '{print $4}' | cut -d '/' -f 1):80 -x xml_report.xml
         true
+        pwd | echo "this is PWD"
       displayName: 'Owasp Container Scan'
 
     - powershell: |

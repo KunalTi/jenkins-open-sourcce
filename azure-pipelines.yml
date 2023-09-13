@@ -34,3 +34,4 @@ stages:
       inputs:
         testResultsFormat: 'NUnit'
         testResultsFiles: 'converted_report.xml'
+    - bash: sudo docker rm -f testcon

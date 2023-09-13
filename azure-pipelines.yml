@@ -16,12 +16,12 @@ stages:
 
     - bash: |
         chmod -R 777 ./
-        docker run --rm -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-stable zap-full-scan.py -t http://$(ip -f inet -o addr show docker0 | awk '{print $4}' | cut -d '/' -f 1):<container_port> -x xml_report.xml
+        docker run --rm -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-stable zap-full-scan.py -t http://$(ip -f inet -o addr show docker0 | awk '{print $4}' | cut -d '/' -f 1):80 -x xml_report.xml
         true
       displayName: 'Owasp Container Scan'
 
     - powershell: |
-        $XslPath = "jenkins-open-sourcce/xml_to_nunit.xslt"
+        $XslPath = "xml_to_nunit.xslt" 
         $XmlInputPath = "xml_report.xml"
         $XmlOutputPath = "converted_report.xml"
         $XslTransform = New-Object System.Xml.Xsl.XslCompiledTransform

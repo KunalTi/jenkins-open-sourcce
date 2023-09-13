@@ -1,32 +1,27 @@
-resources:
-  repositories:
-    - repository: jenkins-open-sourcce
-      type: git
-      name: kunalt/jenkins-open-sourcce
-      ref: refs/heads/master
-
 trigger: none
 
 stages:
-- stage: buildstage
+- stage: 'buildstage'
   jobs:
-  - job: buildjob
+  - job: 'buildjob'
     pool:
       vmImage: 'ubuntu-latest'
     steps:
-    - checkout: self
-    - checkout: jenkins-open-source
-
-    - bash: docker run -d -p 8080:8080 jenkins/jenkins
-      displayName: 'App Container'
+    - bash: |
+        # Pull the InfluxDB Docker image
+        docker pull influxdb
+        # Run the InfluxDB container
+        docker run -d -p 80:80 influxdb
+      displayName: 'Pull and Run InfluxDB Container'
 
     - bash: |
         chmod -R 777 ./
         docker run --rm -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-stable zap-full-scan.py -t http://$(ip -f inet -o addr show docker0 | awk '{print $4}' | cut -d '/' -f 1):<container_port> -x xml_report.xml
+        true
       displayName: 'Owasp Container Scan'
 
     - powershell: |
-        $XslPath = "repo_name/xml_to_nunit.xslt"
+        $XslPath = "<repo_name>/xml_to_nunit.xslt"
         $XmlInputPath = "xml_report.xml"
         $XmlOutputPath = "converted_report.xml"
         $XslTransform = New-Object System.Xml.Xsl.XslCompiledTransform

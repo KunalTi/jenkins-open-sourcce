@@ -2,7 +2,7 @@ resources:
   repositories:
     - repository: jenkins-open-sourcce
       type: git
-      name: KunalTi/jenkins-open-sourcce
+      name: kunalt/jenkins-open-sourcce
       ref: refs/heads/master
 
 trigger: none
